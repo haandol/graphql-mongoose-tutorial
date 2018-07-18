@@ -1,0 +1,31 @@
+{
+  "name": "graphql-mongoose-tutorial",
+  "version": "1.0.0",
+  "description": "graphql mongoose tutorial",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc; node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haandol/graphql-mongoose-tutorial.git"
+  },
+  "author": "haandol <ldg55d@gmail.com> (http://haandol.github.io)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haandol/graphql-mongoose-tutorial/issues"
+  },
+  "homepage": "https://github.com/haandol/graphql-mongoose-tutorial#readme",
+  "dependencies": {
+    "@types/graphql": "^0.13.3",
+    "@types/mongoose": "^5.2.0",
+    "@types/node": "^10.5.2",
+    "@types/restify": "^7.2.3",
+    "apollo-server-restify": "^1.3.6",
+    "graphql": "^0.13.2",
+    "mongoose": "^5.2.4",
+    "restify": "^7.2.1",
+    "typescript": "^2.9.2"
+  }
+}
