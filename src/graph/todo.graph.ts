@@ -1,60 +1,40 @@
-import {
-  GraphQLID, GraphQLString, GraphQLBoolean, GraphQLObjectType, GraphQLList
-} from 'graphql';
 import * as mongoose from 'mongoose';
 import { TodoModel } from '../model/todo.model';
 
-export const TodoType = new GraphQLObjectType({  
-  name: 'todo',
-  fields: function () {
-    return {
-      id: {
-        type: GraphQLID
-      },
-      content: {
-        type: GraphQLString
-      },
-      completed: {
-        type: GraphQLBoolean
-      }
-    }
+export const typeDefs = `
+  type Todo {
+    id: String
+    content: String
+    completed: Boolean
   }
-});
 
-export const QueryType = new GraphQLObjectType({  
-  name: 'Query',
-  fields: () => ({
-    todos: {
-      type: new GraphQLList(TodoType),
-      resolve: () => TodoModel.find().exec().then(todos => todos.map((todo) => todo.toObject()))
-    }
-  }),
-});
+  type Query {
+    todos: [Todo]
+    todo(id: String!): Todo
+  }
 
-export const MutationType = new GraphQLObjectType({
-  name: 'Mutation',
-  fields: () => ({
-    addTodo: {
-      type: TodoType,
-      args: {
-        content: { type: GraphQLString },
-      },
-      resolve: async (_, args) => {
-        const { content } = args;
-        return await TodoModel.create({ content: content, completed: false });
-      }
-    },
-    completeTodo: {
-      type: TodoType,
-      args: {
-        id: { type: GraphQLString },
-      },
-      resolve: async (_, args) => {
-        const { id } = args;
-        const doc: any = await TodoModel.findById(new mongoose.Types.ObjectId(id)).exec();
-        return await TodoModel.findByIdAndUpdate(new mongoose.Types.ObjectId(id), { completed: !doc.completed });
-      }
-    }
-  }) 
-});
- 
+  type Mutation {
+    addTodo(content: String!): Todo
+    completeTodo(id: String!): Boolean
+  }
+`;
+
+export const resolvers = {
+  todos: async () => {
+    const docs = await TodoModel.find({}).exec();
+    return docs.map(doc => doc.toObject())
+  },
+  todo: async (_: any, id: string) => {
+    const doc = await TodoModel.findById(id).exec();
+    return doc && doc.toObject();
+  },
+  addTodo: async (args: any) => {
+    const { content } = args;
+    return await TodoModel.create({ content: content, completed: false });
+  },
+  completeTodo: async (args: any) => {
+    const { id } = args;
+    const doc: any = await TodoModel.findById(new mongoose.Types.ObjectId(id)).exec();
+    return await TodoModel.findByIdAndUpdate(new mongoose.Types.ObjectId(id), { completed: !doc.completed });
+  }
+};
