@@ -27,7 +27,6 @@
     "express-graphql": "^0.6.12",
     "graphql": "^0.13.2",
     "merge-graphql-schemas": "^1.5.3",
-    "merge-graphql-schemas-ts": "^1.1.4",
     "mongoose": "^5.2.4",
     "typescript": "^2.9.2"
   }

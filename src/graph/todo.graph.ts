@@ -20,12 +20,14 @@ export const typeDefs = `
 `;
 
 export const resolvers = {
-  todos: async () => {
+  todos: async (args: any, context: any, info: any) => {
+    console.log(context);
     const docs = await TodoModel.find({}).exec();
     return docs.map(doc => doc.toObject())
   },
-  todo: async (_: any, id: string) => {
-    const doc = await TodoModel.findById(id).exec();
+  todo: async (args: any, context: any, info: any) => {
+    console.log(context);
+    const doc = await TodoModel.findOne({_id: new mongoose.Types.ObjectId(args.id)}).exec();
     return doc && doc.toObject();
   },
   addTodo: async (args: any) => {
